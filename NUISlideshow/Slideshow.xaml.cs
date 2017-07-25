@@ -155,6 +155,67 @@ namespace NUISlideshow
                     medialist.incrementPosition();
             })); };
 
+            // Based off the hand pose on the Project Prague Page - https://docs.microsoft.com/en-us/gestures/
+
+            var rotate_left_begin = new HandPose("RotateBegin", new FingerPose(
+                                                                               new[] { Finger.Thumb, Finger.Index }, // Target the Thumb and Index.
+                                                                               FingerFlexion.Open // Both fingers pointing forwards
+                                                                               ),
+                                                                               new FingerPose(
+                                                                               new[] { Finger.Ring, Finger.Middle, Finger.Pinky }, // Target the Rest of the fingers.
+                                                                               FingerFlexion.Open, PoseDirection.Up // Both fingers pointing upwards
+                                                                               ),
+                                                                new FingertipPlacementRelation(Finger.Index, RelativePlacement.Above, Finger.Thumb), // The Index should be above the thumb
+                                                                new FingertipDistanceRelation(Finger.Index, RelativeDistance.Touching, Finger.Thumb) // Both fingers should be touching
+                                                 );
+
+            var rotate_left_end = new HandPose("RotateEnd", new FingerPose(
+                                                                            new[] { Finger.Thumb, Finger.Index }, // Target the thumb and Index
+                                                                            FingerFlexion.Open 
+                                                                           ),
+                                                                           new FingerPose(
+                                                                               new[] { Finger.Ring, Finger.Middle, Finger.Pinky }, // Target the Rest of the fingers.
+                                                                               FingerFlexion.Open, PoseDirection.Left // Both fingers pointing to the Left
+                                                                               ),
+                                                           new FingertipDistanceRelation(Finger.Index, RelativeDistance.Touching, Finger.Thumb), // Both fingers should still be touching.
+                                                           new FingertipPlacementRelation(Finger.Index, RelativePlacement.Left, Finger.Thumb)    // The index finger should be to the left of the thumm
+                                                           );
+
+            var rotate_left_gesture = new Gesture("rotateLeft", rotate_left_begin, rotate_left_end);
+
+
+            var rotate_right_begin = new HandPose("RotateBegin", new FingerPose(
+                                                                               new[] { Finger.Thumb, Finger.Index }, // Target the Thumb and Index.
+                                                                               FingerFlexion.Open
+                                                                               ),
+                                                                 new FingerPose(
+                                                                               new[] { Finger.Ring, Finger.Middle, Finger.Pinky }, // Target the Rest of the fingers.
+                                                                               FingerFlexion.Open, PoseDirection.Up // Both fingers pointing upwards
+                                                                               ),
+                                                                new FingertipPlacementRelation(Finger.Index, RelativePlacement.Above, Finger.Thumb), // The Index should be above the thumb
+                                                                new FingertipDistanceRelation(Finger.Index, RelativeDistance.Touching, Finger.Thumb) // Both fingers should be touching
+                                                 );
+
+            var rotate_right_end = new HandPose("RotateEnd", new FingerPose(
+                                                                            new[] { Finger.Thumb, Finger.Index }, // Target the thumb and Index
+                                                                            FingerFlexion.Open
+                                                                           ),
+                                                             new FingerPose(
+                                                                               new[] { Finger.Ring, Finger.Middle, Finger.Pinky }, // Target the Rest of the fingers.
+                                                                               FingerFlexion.Open, PoseDirection.Right // Both fingers pointing to the left
+                                                                               ),
+                                                           new FingertipDistanceRelation(Finger.Index, RelativeDistance.Touching, Finger.Thumb), // Both fingers should still be touching.
+                                                           new FingertipPlacementRelation(Finger.Index, RelativePlacement.Right, Finger.Thumb)    // The index finger should be to the Right of the thumm
+                                                           );
+
+            var rotate_right_gesture = new Gesture("rotateRight", rotate_right_begin, rotate_right_end);
+            rotate_left_gesture.Triggered += (object sender, GestureSegmentTriggeredEventArgs e) => { rotateImage90DegLeft();};
+
+            rotate_right_gesture.Triggered += (object sender, GestureSegmentTriggeredEventArgs e) => { rotateImage90DegRight();};
+
+            await service.RegisterGesture(rotate_left_gesture);
+            await service.RegisterGesture(rotate_right_gesture);
+
 
 
             //  Register the gestures with the service
@@ -225,7 +286,8 @@ namespace NUISlideshow
 
         private void rotateImage90DegRight()
         {
-            BitmapImage Original = MainImage.Source as BitmapImage;
+            Dispatcher.Invoke(new Action(() => {
+                BitmapImage Original = MainImage.Source as BitmapImage;
             BitmapImage Rotated = new BitmapImage();
             Rotated.BeginInit();
             Rotated.UriSource = Original.UriSource;
@@ -233,11 +295,13 @@ namespace NUISlideshow
             Rotated.EndInit();
 
             MainImage.Source = Rotated;
+        }));
 
         }
 
         private void rotateImage90DegLeft()
         {
+            Dispatcher.Invoke(new Action(() => { 
             BitmapImage Original = MainImage.Source as BitmapImage;
             BitmapImage Rotated = new BitmapImage();
             Rotated.BeginInit();
@@ -246,6 +310,7 @@ namespace NUISlideshow
             Rotated.EndInit();
 
             MainImage.Source = Rotated;
+            }));
 
         }
 
