@@ -1,0 +1,30 @@
+﻿<Window x:Class="NUISlideshow.Slideshow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NUISlideshow"
+        mc:Ignorable="d"
+        Title="Slideshow" Height="720" Width="1280">
+    
+    <!-- Slideshow styles -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/SlideshowStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    
+    <Grid Background="{StaticResource MainTheme_color}">
+        
+        <Image Name="MainImage" Style="{StaticResource Image}" />
+
+        <Button Style="{StaticResource BackButtonStyle}" Click="PreviousImage" xml:lang="en-UK" />
+        <Button Style="{StaticResource ForwardButtonStyle}" Click="NextImage"  xml:lang="en-UK" />
+
+        <Button Style="{StaticResource ExitButtonStyle}" Click="GoBackButton" VerticalAlignment="Top" HorizontalAlignment="Right" />
+    
+    </Grid>
+</Window>

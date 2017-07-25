@@ -5,8 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NUISlideshow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow" Height="720" Width="1280">
+
+    <!-- MainWindow Styles Style -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/MainWindowStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+    <Grid Background="{StaticResource MainTheme_color}">
+
+        <StackPanel Style="{StaticResource ContentStyle}">
+
+            <TextBlock Style="{StaticResource HeadingTitleStyle}" Text="Reddit Slideshow" />
+
+            <TextBlock Style="{StaticResource TextboxStyle}" Text="Enter the URL to use as an Image Source." />
+
+            <TextBox Name="SubredditUrlTextBox" Style="{StaticResource SubredditInputStyle}"  Text="r/wallpaper" LostFocus="subredditTextBoxLostFocus"></TextBox>
+
+            <Button Style="{StaticResource GenerateSlideshowStyle}"  Content="Generate Slideshow" Click="GenerateSlideshow"/>
+        </StackPanel>
     </Grid>
 </Window>
